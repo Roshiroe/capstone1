@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 40px;
+            background-image: url("/static/images/101.jpg"); /* Adjust this path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .receipt-box {
+            max-width: 700px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.95); /* Slight transparency */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .total, .net, .tax, .discount {
+            text-align: right;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .net {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="receipt-box">
+    <h2>AM Hardware Shop Receipt</h2>
+    <p><strong>Date & Time:</strong> {{ sale.created_at|date:"Y-m-d H:i:s" }}</p>
+    <p><strong>Cashier:</strong> {{ sale.cashier.username }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in receipt %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.qty }}</td>
+                <td>₱{{ item.unit|floatformat:2 }}</td>
+                <td>₱{{ item.total|floatformat:2 }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No items found in this sale.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="total">Gross Total: ₱{{ gross_total|floatformat:2 }}</p>
+    <p class="discount">Discount ({{ discount_percent }}%): -₱{{ discount_amount|floatformat:2 }}</p>
+    <p class="tax">Tax ({{ tax_percent }}%): +₱{{ tax_amount|floatformat:2 }}</p>
+    <p class="net">Net Total: ₱{{ net_total|floatformat:2 }}</p>
+
+    <div class="button-container">
+        <a href="{% url 'generate_receipt_pdf' sale.id %}" class="btn" target="_blank">📄 Download PDF</a>
+        <a href="{% url 'pos_view' %}" class="btn btn-primary mt-3">🔙 Return to POS</a>
+    </div>
+</div>
+</body>
+</html>

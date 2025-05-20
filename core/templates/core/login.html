@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Login Page Custom Styles -->
+<style>
+  body {
+    background-image: url("{% static 'images/101.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .login-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 40px 30px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  .login-container img.logo {
+    width: 80px;
+    margin-bottom: 15px;
+  }
+
+  .login-container h2 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    color: #333;
+  }
+
+  .form-control {
+    margin-bottom: 15px;
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .btn-login:hover {
+    background-color: #0056b3;
+  }
+
+  .form-check {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+</style>
+
+<!-- Login Box -->
+<div class="login-container">
+  <!-- Optional logo -->
+  <img src="{% static 'images/log.jpg' %}" alt="Logo" class="logo">
+
+  <h2>system /POS log in</h2>
+  
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    
+    {{ form.password.label_tag }}
+    {{ form.password }}
+    
+    <div class="form-check">
+      {{ form.remember_me }} {{ form.remember_me.label_tag }}
+    </div>
+
+    <button type="submit" class="btn btn-login">Login</button>
+  </form>
+</div>
+{% endblock %}
